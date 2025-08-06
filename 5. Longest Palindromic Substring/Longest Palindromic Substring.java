@@ -1,49 +1,32 @@
 class Solution {
+    private int expandAroundCenter(String s, int left, int right) {
+        while(left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+
+        return right - left - 1;
+    }
+
     public String longestPalindrome(String s) {
-        if(s.length() == 1) {
-            return s;
+        if(s == null || s.length() < 1) {
+            return "";
         }
 
-        String LPS = "";
-        
-        for(int i=1;i<s.length();i++) {
-            // For odd string length
-            int low = i;
-            int high = i;
+        int start= 0;
+        int end = 0;
 
-            while(s.charAt(low) == s.charAt(high)) {
-                low--;
-                high++;
+        for(int i=0;i<s.length();i++) {
+            int len1 = expandAroundCenter(s, i, i); // Odd length palindromes
+            int len2 = expandAroundCenter(s, i, i + 1); // Even length palindromes
 
-                if(low == -1 || high == s.length()) {
-                    break;
-                }
-            }
-
-            String palindrome = s.substring(low+1, high);
-            if(palindrome.length() > LPS.length()) {
-                LPS = palindrome;
-            }
-
-            // For even string length
-            low = i-1;
-            high = i;
-
-            while(s.charAt(low) == s.charAt(high)) {
-                low--;
-                high++;
-
-                if(low == -1 || high == s.length()) {
-                    break;
-                }
-            }
-
-            palindrome = s.substring(low+1, high);
-            if(palindrome.length() > LPS.length()) {
-                LPS = palindrome;
+            int len = Math.max(len1, len2);
+            if (len > end - start + 1) {
+                start = i - (len - 1) / 2; // Calculate the start index
+                end = i + len / 2;         // Calculate the end index
             }
         }
 
-        return LPS;
+        return s.substring(start, end + 1);
     }
 }
