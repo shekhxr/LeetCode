@@ -1,28 +1,27 @@
 class Solution {
     public int lengthOfLongestSubstring(String s) {
-        if(s == null || s.length() == 0) {
-            return 0;
+        if (s.length() <= 1) {
+            return s.length();
         }
 
-        if(s.length() == 1) {
-            return 1;
-        }
-        
-        int left = 0;
-        int right = 0;
-        Set <Character> map = new HashSet<>();
-        int ans = 0;
+        int lastSeen[] = new int[128]; // for all ASCII chars
+        Arrays.fill(lastSeen, -1);
 
-        while(right < s.length()) {
-            if(!map.contains(s.charAt(right))) {
-                map.add(s.charAt(right));
-                ans = Math.max(ans, right-left+1);
-                right++;
-            } else {
-                map.remove(s.charAt(left));
-                left++;
+        int start = 0;
+        int maxLen = 0;
+
+        for (int end = 0; end < s.length(); end++) {
+            char c = s.charAt(end);
+
+            // If character was seen inside the current window
+            if(lastSeen[c] >= start) {
+                start = lastSeen[c] + 1;
             }
+
+            lastSeen[c] = end;
+            maxLen = Math.max(maxLen, end - start + 1);
         }
-        return ans;
+
+        return maxLen;
     }
 }
