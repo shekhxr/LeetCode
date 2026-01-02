@@ -1,29 +1,27 @@
-import java.util.HashMap;
+class Solution {
+    private boolean isOrdered(String word1, String word2, HashMap<Character, Integer> map) {
+        int minLength = Math.min(word1.length(), word2.length());
 
-public class VerifyinganAlienDictionary {
+        for(int i=0;i<minLength;i++) {
+            char c1 = word1.charAt(i);
+            char c2 = word2.charAt(i);
+
+            if(c1 != c2) {
+                return map.get(c1) < map.get(c2);
+            }
+        }
+
+        return word1.length() <= word2.length();
+    }
+
     public boolean isAlienSorted(String[] words, String order) {
-        HashMap <Character, Integer> map = new HashMap<>();
-
+        HashMap<Character, Integer> map = new HashMap<>();
         for(int i=0;i<order.length();i++) {
             map.put(order.charAt(i), i);
         }
 
         for(int i=0;i<words.length-1;i++) {
-            for(int j=0;j<words[i].length();j++) {
-                if(j >= words[i+1].length()) {
-                    return false;
-                }
-
-                if(words[i].charAt(j) != words[i+1].charAt(j)) {
-                    int curr = map.get(words[i].charAt(j));
-                    int next = map.get(words[i+1].charAt(j));
-                    if(curr > next) {
-                        return false;
-                    } else {
-                        break;
-                    }
-                }
-            }
+            if(!isOrdered(words[i], words[i+1], map)) return false;
         }
 
         return true;
