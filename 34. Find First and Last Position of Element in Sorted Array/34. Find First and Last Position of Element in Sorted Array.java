@@ -1,34 +1,46 @@
 class Solution {
     public int[] searchRange(int[] nums, int target) {
-        int first = -1, last = -1;
-        int i = 0, j = nums.length - 1;
+        int first = findFirst(nums, target);
+        int last = findLast(nums, target);
+        
+        return new int[]{first, last};
+    }
 
-        while(i <= j) {
-            int mid = i + (j - i) / 2;
+    private int findFirst(int nums[], int target) {
+        int si = 0;
+        int ei = nums.length-1;
+        int first = -1;
 
+        while(si <= ei) {
+            int mid = si+(ei-si)/2;
             if(nums[mid] == target) {
                 first = mid;
-                j = mid - 1;
+                ei = mid-1;             
+            } else if(nums[mid] < target) {
+                si = mid+1;
+            } else {
+                ei = mid-1;
             }
-            else if(nums[mid] < target) i = mid + 1;
-            else j = mid - 1;
         }
+        return first;
+    }
 
-        i = 0;
-        j = nums.length - 1;
-        while(i <= j) {
-            int mid = i + (j - i) / 2;
+    private int findLast(int nums[], int target) {
+        int si = 0;
+        int ei = nums.length-1;
+        int last = -1;
 
+        while(si <= ei) {
+            int mid = si+(ei-si)/2;
             if(nums[mid] == target) {
                 last = mid;
-                i = mid + 1;
+                si = mid+1;             
+            } else if(nums[mid] < target) {
+                si = mid+1;
+            } else {
+                ei = mid-1;
             }
-            else if(nums[mid] < target) i = mid + 1;
-            else j = mid - 1;
         }
-
-        return new int[]{first, last};
-
-        
+        return last;
     }
 }
